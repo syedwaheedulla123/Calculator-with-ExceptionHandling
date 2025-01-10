@@ -1,4 +1,8 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Calculator
 {
@@ -6,61 +10,72 @@ namespace Calculator
     {
         static void Main(string[] args)
         {
-            double num1, num2, result;
+            double num1, num2, result = 0;
             string operation;
-
-            // Get first number
-            Console.WriteLine("Please enter first number:");
-            num1 = Convert.ToDouble(Console.ReadLine());
-
-            // Get second number
-            Console.WriteLine("Please enter second number:");
-            num2 = Convert.ToDouble(Console.ReadLine());
-
-            // Get the operation
-            Console.WriteLine("Choose the operation (+, -, *, /, %): ");
-            operation = Console.ReadLine();
 
             try
             {
-                // Perform the calculation based on the operation chosen
+                // Input for the first number
+                Console.WriteLine("Please enter first number:");
+                num1 = Convert.ToDouble(Console.ReadLine());
+
+                // Input for the second number
+                Console.WriteLine("Please enter second number:");
+                num2 = Convert.ToDouble(Console.ReadLine());
+
+                // Input for the operation
+                Console.WriteLine("Choose the operation (+, -, *, /, %): ");
+                operation = Console.ReadLine();
+
                 switch (operation)
                 {
                     case "+":
                         result = num1 + num2;
                         break;
+
                     case "-":
                         result = num1 - num2;
                         break;
+
                     case "*":
                         result = num1 * num2;
                         break;
+
                     case "/":
-                        // Try to divide and catch any division by zero exceptions
-                        result = num1 / num2; // If num2 is zero, this will throw DivideByZeroException
+                        // Division by zero exception handling
+                        if (num2 != 0)
+                        {
+                            result = num1 / num2;
+                        }
+                        else
+                        {
+                            throw new DivideByZeroException("Error: Division by zero is not allowed.");
+                        }
                         break;
+
                     case "%":
                         result = num1 % num2;
                         break;
+
                     default:
-                        Console.WriteLine("Invalid operation.");
+                        Console.WriteLine("Invalid operation! Please choose a valid option.");
                         return;
                 }
 
-                // Output the result
+                // Display result
                 Console.WriteLine($"Result: {num1} {operation} {num2} = {result}");
             }
-            catch (DivideByZeroException)
+            catch (FormatException ex)
             {
-                Console.WriteLine("Error: Division by zero is not allowed.");
+                Console.WriteLine($"Invalid input format: {ex.Message}. Please enter a valid number.");
+            }
+            catch (DivideByZeroException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An unexpected error occurred: {ex.Message}");
-            }
-            finally
-            {
-                Console.WriteLine("Thank you for using the calculator.");
+                Console.WriteLine($"An error occurred: {ex.Message}");
             }
         }
     }
